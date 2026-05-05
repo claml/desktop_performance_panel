@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://perf-panel.local/contracts/settings.schema.json",
+  "title": "Settings",
+  "description": "Persistent user configuration stored in settings.json under %APPDATA%/perf-panel/",
+  "type": "object",
+  "required": ["opacity", "alwaysOnTop", "clickThrough", "position", "pollingIntervalMs", "visibleModules", "showTemperatures"],
+  "additionalProperties": false,
+  "properties": {
+    "opacity": {
+      "type": "number",
+      "minimum": 0.1,
+      "maximum": 1.0,
+      "default": 0.85,
+      "description": "Window opacity level (0.1 = nearly transparent, 1.0 = fully opaque)"
+    },
+    "alwaysOnTop": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the panel stays on top of other windows"
+    },
+    "clickThrough": {
+      "type": "boolean",
+      "default": false,
+      "description": "When true, mouse events pass through to windows beneath (Windows only)"
+    },
+    "position": {
+      "type": "object",
+      "required": ["x", "y"],
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0,
+          "description": "Window X position in screen coordinates"
+        },
+        "y": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0,
+          "description": "Window Y position in screen coordinates"
+        }
+      },
+      "description": "Last saved window position"
+    },
+    "pollingIntervalMs": {
+      "type": "number",
+      "minimum": 500,
+      "maximum": 10000,
+      "default": 1000,
+      "description": "Hardware polling interval in milliseconds. Changing this restarts the helper process with new --interval-ms value."
+    },
+    "visibleModules": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["cpu", "memory", "network", "gpu", "disk", "battery"]
+      },
+      "uniqueItems": true,
+      "default": ["cpu", "memory", "network", "gpu"],
+      "description": "List of visible metric modules on the panel"
+    },
+    "showTemperatures": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to display temperature readings alongside usage stats"
+    }
+  }
+}

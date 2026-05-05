@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://perf-panel.local/contracts/hardware_snapshot.schema.json",
+  "title": "HardwareSnapshot",
+  "description": "A single point-in-time hardware sensor reading. All fields are nullable; null means the sensor is unavailable on this machine.",
+  "type": "object",
+  "required": ["timestamp"],
+  "additionalProperties": false,
+  "properties": {
+    "timestamp": {
+      "type": "number",
+      "description": "Unix timestamp in milliseconds when this snapshot was collected"
+    },
+    "cpu": {
+      "$ref": "#/$defs/CpuSnapshot"
+    },
+    "gpu": {
+      "$ref": "#/$defs/GpuSnapshot"
+    },
+    "memory": {
+      "$ref": "#/$defs/MemorySnapshot"
+    },
+    "network": {
+      "$ref": "#/$defs/NetworkSnapshot"
+    },
+    "disk": {
+      "$ref": "#/$defs/DiskSnapshot"
+    },
+    "battery": {
+      "$ref": "#/$defs/BatterySnapshot"
+    },
+    "error": {
+      "type": ["string", "null"],
+      "description": "Error description if this snapshot has partial or complete failure. Null when all sensors read successfully."
+    }
+  },
+  "$defs": {
+    "CpuSnapshot": {
+      "type": "object",
+      "required": [],
+      "additionalProperties": false,
+      "properties": {
+        "usagePercent": {
+          "type": ["number", "null"],
+          "description": "Total CPU usage 0-100. Null if unavailable."
+        },
+        "temperatureC": {
+          "type": ["number", "null"],
+          "description": "CPU package temperature in Celsius. Null if no sensor available."
+        },
+        "frequencyMhz": {
+          "type": ["number", "null"],
+          "description": "Current CPU frequency in MHz. Null if unavailable."
+        },
+        "powerW": {
+          "type": ["number", "null"],
+          "description": "CPU package power consumption in Watts. Null if no sensor available."
+        }
+      }
+    },
+    "GpuSnapshot": {
+      "type": "object",
+      "required": [],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": ["string", "null"],
+          "description": "GPU display name (e.g. 'NVIDIA GeForce RTX 3060'). Null if no GPU detected."
+        },
+        "usagePercent": {
+          "type": ["number", "null"],
+          "description": "GPU core usage 0-100. Null if unavailable."
+        },
+        "temperatureC": {
+          "type": ["number", "null"],
+          "description": "GPU core temperature in Celsius. Null if no sensor available."
+        },
+        "memoryUsedMb": {
+          "type": ["number", "null"],
+          "description": "GPU dedicated memory used in MB. Null if unavailable."
+        },
+        "memoryTotalMb": {
+          "type": ["number", "null"],
+          "description": "GPU total dedicated memory in MB. Null if unavailable."
+        },
+        "powerW": {
+          "type": ["number", "null"],
+          "description": "GPU power consumption in Watts. Null if no sensor available."
+        },
+        "fanRpm": {
+          "type": ["number", "null"],
+          "description": "GPU fan speed in RPM. Null if no sensor available."
+        }
+      }
+    },
+    "MemorySnapshot": {
+      "type": "object",
+      "required": [],
+      "additionalProperties": false,
+      "properties": {
+        "usedGb": {
+          "type": ["number", "null"],
+          "description": "Physical memory used in GB. Null if unavailable."
+        },
+        "totalGb": {
+          "type": ["number", "null"],
+          "description": "Total physical memory in GB. Null if unavailable."
+        },
+        "usagePercent": {
+          "type": ["number", "null"],
+          "description": "Memory usage percentage 0-100. Null if unavailable."
+        }
+      }
+    },
+    "NetworkSnapshot": {
+      "type": "object",
+      "required": [],
+      "additionalProperties": false,
+      "properties": {
+        "downloadBps": {
+          "type": ["number", "null"],
+          "description": "Download rate in bytes per second. Null if unavailable."
+        },
+        "uploadBps": {
+          "type": ["number", "null"],
+          "description": "Upload rate in bytes per second. Null if unavailable."
+        }
+      }
+    },
+    "DiskSnapshot": {
+      "type": "object",
+      "required": [],
+      "additionalProperties": false,
+      "properties": {
+        "readBps": {
+          "type": ["number", "null"],
+          "description": "Disk read rate in bytes per second. Null if unavailable."
+        },
+        "writeBps": {
+          "type": ["number", "null"],
+          "description": "Disk write rate in bytes per second. Null if unavailable."
+        }
+      }
+    },
+    "BatterySnapshot": {
+      "type": "object",
+      "required": [],
+      "additionalProperties": false,
+      "properties": {
+        "percent": {
+          "type": ["number", "null"],
+          "description": "Battery charge percentage 0-100. Null if no battery present."
+        },
+        "charging": {
+          "type": ["boolean", "null"],
+          "description": "True if AC power connected and charging. Null if no battery present."
+        }
+      }
+    }
+  }
+}

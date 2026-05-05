@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://perf-panel.local/contracts/events.schema.json",
+  "title": "Events",
+  "description": "All events emitted from Rust backend to React frontend (and future listeners)",
+  "type": "object",
+  "required": ["contractVersion", "events"],
+  "additionalProperties": false,
+  "properties": {
+    "contractVersion": {
+      "type": "string",
+      "description": "Contract version shared with header.json",
+      "default": "1.0.0"
+    },
+    "events": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/EventDef" },
+      "minItems": 1
+    }
+  },
+  "$defs": {
+    "EventDef": {
+      "type": "object",
+      "required": ["name", "direction", "description", "payloadSchema", "frequency"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Event name used in listen/emit calls. Uses colon namespace convention (e.g. 'hardware:snapshot'). Stable across all consumers."
+        },
+        "direction": {
+          "type": "string",
+          "enum": ["backend_to_frontend", "helper_to_backend"],
+          "description": "Data flow direction"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable event description"
+        },
+        "payloadSchema": {
+          "type": "object",
+          "description": "JSON Schema for the event payload",
+          "properties": {}
+        },
+        "frequency": {
+          "type": "string",
+          "enum": ["once", "on_change", "periodic", "debug"],
+          "description": "Emission frequency pattern"
+        }
+      }
+    }
+  }
+}

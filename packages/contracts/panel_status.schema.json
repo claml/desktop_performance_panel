@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://perf-panel.local/contracts/panel_status.schema.json",
+  "title": "PanelStatus",
+  "description": "Full panel runtime status, returned by panel_get_status command",
+  "type": "object",
+  "required": ["windowVisible", "alwaysOnTop", "clickThrough", "opacity", "helperRunning", "helperPid", "latestSnapshot"],
+  "additionalProperties": false,
+  "properties": {
+    "windowVisible": {
+      "type": "boolean",
+      "description": "Whether the panel window is currently visible"
+    },
+    "alwaysOnTop": {
+      "type": "boolean",
+      "description": "Current always-on-top state"
+    },
+    "clickThrough": {
+      "type": "boolean",
+      "description": "Current click-through state"
+    },
+    "opacity": {
+      "type": "number",
+      "minimum": 0.1,
+      "maximum": 1.0,
+      "description": "Current window opacity"
+    },
+    "helperRunning": {
+      "type": "boolean",
+      "description": "Whether the hardware helper process is currently running"
+    },
+    "helperPid": {
+      "type": ["number", "null"],
+      "description": "Hardware helper process ID, or null if not running"
+    },
+    "latestSnapshot": {
+      "oneOf": [
+        { "$ref": "./hardware_snapshot.schema.json" },
+        { "type": "null" }
+      ],
+      "description": "Most recent hardware snapshot, or null if no data has been collected yet"
+    }
+  }
+}

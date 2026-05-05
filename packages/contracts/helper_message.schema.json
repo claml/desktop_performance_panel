@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://perf-panel.local/contracts/helper_message.schema.json",
+  "title": "HelperMessage",
+  "description": "Envelope protocol for all stdout output from hardware-helper.exe. Every line is a complete JSON object conforming to one of the type-specific schemas below.",
+  "type": "object",
+  "required": ["type", "version", "timestamp"],
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["init", "snapshot", "error", "status"],
+      "description": "Message type discriminator"
+    },
+    "version": {
+      "type": "string",
+      "description": "Contract version, e.g. '1.0.0'"
+    },
+    "timestamp": {
+      "type": "number",
+      "description": "Unix timestamp in milliseconds when this message was produced"
+    },
+    "message": {
+      "type": "string",
+      "description": "Human-readable description. Required for 'error' and 'status' types."
+    },
+    "recoverable": {
+      "type": "boolean",
+      "description": "For 'error' type only: if true, helper continues collecting; if false, helper is about to exit."
+    },
+    "data": {
+      "$ref": "./hardware_snapshot.schema.json",
+      "description": "Hardware snapshot payload. Required for 'snapshot' type."
+    }
+  },
+  "oneOf": [
+    {
+      "description": "Init message: sent once when helper starts",
+      "properties": {
+        "type": { "const": "init" },
+        "version": { "type": "string" },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["type", "version", "timestamp"],
+      "additionalProperties": false
+    },
+    {
+      "description": "Snapshot message: one complete hardware reading",
+      "properties": {
+        "type": { "const": "snapshot" },
+        "version": { "type": "string" },
+        "timestamp": { "type": "number" },
+        "data": { "$ref": "./hardware_snapshot.schema.json" }
+      },
+      "required": ["type", "version", "timestamp", "data"],
+      "additionalProperties": false
+    },
+    {
+      "description": "Error message: a sensor or collection error occurred",
+      "properties": {
+        "type": { "const": "error" },
+        "version": { "type": "string" },
+        "timestamp": { "type": "number" },
+        "message": { "type": "string" },
+        "recoverable": { "type": "boolean" }
+      },
+      "required": ["type", "version", "timestamp", "message", "recoverable"],
+      "additionalProperties": false
+    },
+    {
+      "description": "Status message: helper internal state change notification (reserved)",
+      "properties": {
+        "type": { "const": "status" },
+        "version": { "type": "string" },
+        "timestamp": { "type": "number" },
+        "message": { "type": "string" }
+      },
+      "required": ["type", "version", "timestamp", "message"],
+      "additionalProperties": false
+    }
+  ]
+}

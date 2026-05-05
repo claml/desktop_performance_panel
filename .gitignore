@@ -1,0 +1,38 @@
+﻿# Node
+node_modules/
+apps/desktop/node_modules/
+
+# Vite / frontend build
+dist/
+apps/desktop/dist/
+apps/desktop/node_modules/.vite/
+
+# Tauri / Rust build
+target/
+apps/desktop/src-tauri/target/
+
+# .NET build
+bin/
+obj/
+services/hardware-helper/bin/
+services/hardware-helper/obj/
+
+# Alpha portable package
+dist-alpha/
+
+# Logs / temp
+*.log
+*.tmp
+*.bak
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates

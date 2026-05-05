@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://perf-panel.local/contracts/commands.schema.json",
+  "title": "Commands",
+  "description": "All invocable commands. Each entry maps a logical API name to a Tauri snake_case command name, plus parameter and return schemas.",
+  "type": "object",
+  "required": ["contractVersion", "commands"],
+  "additionalProperties": false,
+  "properties": {
+    "contractVersion": {
+      "type": "string",
+      "description": "Contract version shared with header.json",
+      "default": "1.0.0"
+    },
+    "commands": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/CommandDef" },
+      "minItems": 1
+    }
+  },
+  "$defs": {
+    "CommandDef": {
+      "type": "object",
+      "required": ["logicalName", "tauriCommandName", "description", "paramsSchema", "returnsSchema"],
+      "additionalProperties": false,
+      "properties": {
+        "logicalName": {
+          "type": "string",
+          "description": "Logical command name used in API_CONTRACT.md and external documentation. Uses colon namespace convention (e.g. 'settings:get'). Stable across all frontends."
+        },
+        "tauriCommandName": {
+          "type": "string",
+          "description": "Tauri invoke command name in snake_case (e.g. 'settings_get'). Used by tauriBridge.ts to map logical names. Must be unique."
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable command description"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["settings", "window", "hardware", "panel"],
+          "description": "Command category for grouping"
+        },
+        "paramsSchema": {
+          "type": "object",
+          "description": "JSON Schema for the command parameters. Empty object {} means no parameters.",
+          "properties": {
+            "patch": {
+              "type": "object",
+              "description": "For settings_update only: partial settings object to merge"
+            }
+          }
+        },
+        "returnsSchema": {
+          "type": "object",
+          "description": "JSON Schema for the command return value"
+        },
+        "deprecated": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, this command will be removed in a future version"
+        },
+        "platform": {
+          "type": "string",
+          "enum": ["all", "windows", "macos", "linux"],
+          "default": "all",
+          "description": "Target platform. 'all' means cross-platform."
+        }
+      }
+    }
+  }
+}
